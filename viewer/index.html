@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>3D Building Model - Capstone</title>
+<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<base target="_blank">
+<link rel="stylesheet" type="text/css" href="./Qgis2threejs.css">
+<style type="text/css">
+:root {
+  --navy: #122359;
+  --blue: #3C6198;
+  --orange: #F68D55;
+  --peach: #FFCFA9;
+  --panel-bg-top: rgba(255, 207, 169, 0.96);
+  --panel-bg-bottom: rgba(245, 248, 255, 0.98);
+}
+
+#popup, #header {
+  left: 36px;
+}
+
+#layerpanel {
+  left: 14px !important;
+  top: 78px !important;
+  width: 252px;
+  max-height: calc(100vh - 110px);
+  overflow-y: auto;
+  padding: 14px 14px 10px;
+  border: 1px solid rgba(60, 97, 152, 0.22);
+  border-radius: 18px;
+  background: linear-gradient(180deg, var(--panel-bg-top) 0%, rgba(255, 244, 236, 0.98) 24%, var(--panel-bg-bottom) 100%);
+  box-shadow: 0 18px 42px rgba(18, 35, 89, 0.20);
+  backdrop-filter: blur(10px);
+}
+
+#layerpanel::-webkit-scrollbar {
+  width: 10px;
+}
+#layerpanel::-webkit-scrollbar-track {
+  background: rgba(18, 35, 89, 0.06);
+  border-radius: 999px;
+}
+#layerpanel::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--blue), var(--orange));
+  border-radius: 999px;
+}
+
+#layerpanel,
+#layerpanel * {
+  font-family: Arial, sans-serif;
+  color: var(--navy);
+  box-sizing: border-box;
+}
+
+#layerlist {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#layerlist > div {
+  padding: 10px 10px 8px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(60, 97, 152, 0.10);
+}
+
+#layerlist label,
+#layerlist .layer,
+#layerlist .title,
+#layerlist .layername {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--navy) !important;
+}
+
+#layerpanel input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--orange);
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+#layerpanel input[type="range"] {
+  width: 130px;
+  accent-color: var(--blue);
+  vertical-align: middle;
+}
+
+#layerpanel select {
+  min-width: 120px;
+  padding: 5px 9px;
+  border-radius: 10px;
+  border: 1px solid rgba(60, 97, 152, 0.24);
+  background: #fff;
+  color: var(--navy);
+  outline: none;
+}
+
+#layerpanel select:focus {
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px rgba(246, 141, 85, 0.18);
+}
+
+#layerpanel input[type="range"] + span,
+#layerpanel .percent,
+#layerpanel .value {
+  color: var(--blue) !important;
+  font-weight: 700;
+}
+
+#layerpanel .slider,
+#layerpanel .opacity,
+#layerpanel .material {
+  margin-top: 6px;
+}
+
+#toolbtns > div {
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(18, 35, 89, 0.15);
+}
+
+#popupbar,
+#popup > #popupbar {
+  background: linear-gradient(135deg, var(--navy), var(--blue));
+}
+
+.action-btn {
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--orange), var(--peach));
+  color: var(--navy);
+  font-weight: 700;
+}
+
+/* Project navigation button */
+#homebtn {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 10000;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #F68D55, #FFCFA9);
+  color: #122359;
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  box-shadow: 0 10px 28px rgba(18, 35, 89, 0.28);
+}
+#homebtn:hover {
+  background: linear-gradient(135deg, #FFCFA9, #F68D55);
+}
+
+.viewer-navbar {
+  position: fixed;
+  top: 16px;
+  left: 52px;
+  right: 16px;
+  z-index: 10000;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  border-radius: 18px;
+  background: linear-gradient(
+    135deg,
+    rgba(18, 35, 89, 0.96),
+    rgba(60, 97, 152, 0.92)
+  );
+  border: 1px solid rgba(255, 207, 169, 0.22);
+  box-shadow: 0 16px 40px rgba(18, 35, 89, 0.28);
+  backdrop-filter: blur(12px);
+  font-family: Arial, sans-serif;
+}
+
+.viewer-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.viewer-logo-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #F68D55, #FFCFA9);
+  color: #122359;
+  font-weight: 800;
+  font-size: 15px;
+}
+
+.viewer-logo-text {
+  display: flex;
+  flex-direction: column;
+  font-weight: 800;
+  font-size: 14px;
+  line-height: 1.1;
+}
+
+.viewer-logo-text span {
+  margin-top: 3px;
+  color: #FFCFA9;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.viewer-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.viewer-toolbtns {
+  position: static !important;
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+  width: auto !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.viewer-toolbtns > div {
+  position: static !important;
+  width: 36px !important;
+  height: 36px !important;
+  margin: 0 !important;
+  border-radius: 12px !important;
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(255, 207, 169, 0.24) !important;
+  box-shadow: none !important;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.viewer-toolbtns > div:hover {
+  background-color: #FFCFA9 !important;
+  border-color: #F68D55 !important;
+  transform: translateY(-1px);
+}
+
+.viewer-toolbtns > div.hidden {
+  display: none !important;
+}
+
+.viewer-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.viewer-nav-links a {
+  padding: 9px 12px;
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.82);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+  transition: 0.2s ease;
+}
+
+.viewer-nav-links a:hover {
+  color: #122359;
+  background: #FFCFA9;
+}
+
+.viewer-nav-links a.active {
+  color: #122359;
+  background: linear-gradient(135deg, #F68D55, #FFCFA9);
+}
+
+#layerpanel {
+  top: 92px !important;
+}
+
+#popup {
+  top: 92px !important;
+}
+
+</style>
+<script src="./threejs/three.min.js"></script>
+<script src="./threejs/OrbitControls.js"></script>
+<script src="./threejs/ViewHelper.js"></script>
+<script src="./Qgis2threejs.js"></script>
+</head>
+<body>
+
+<body>
+
+<nav class="viewer-navbar">
+  <a href="../index.html" target="_self" class="viewer-logo">
+    <div class="viewer-logo-icon">3D</div>
+    <div class="viewer-logo-text">
+      Campus Mapping
+      <span>3D Viewer</span>
+    </div>
+  </a>
+
+  <div class="viewer-nav-links">
+
+    <div id="toolbtns" class="viewer-toolbtns">
+      <div id="layerbtn" title="Layer Panel"></div>
+      <div id="animbtn" class="hidden" title="Animation"></div>
+      <div id="infobtn" title="Information"></div>
+    </div>
+    <a href="../index.html" target="_self" class="home-icon-btn" aria-label="Kembali ke Homepage" title="Kembali ke Homepage">
+      <svg viewBox="0 0 24 24" class="home-icon" aria-hidden="true">
+        <path d="M3 10.8L12 3l9 7.8v9.7a1.5 1.5 0 0 1-1.5 1.5h-5.2v-6.2H9.7V22H4.5A1.5 1.5 0 0 1 3 20.5v-9.7z"/>
+      </svg>
+    </a>
+  </div>
+</nav>
+
+<div id="view">
+  <div id="northarrow"></div>
+  <div id="navigation"></div>
+</div>
+
+<!-- popup -->
+<div id="popup">
+  <div id="closebtn">&times;</div>
+  <div id="popupbar"></div>
+  <div id="popupbody">
+    <div id="popupcontent"></div>
+
+    <!-- query result -->
+    <div id="queryresult">
+      <table id="qr_coords_table">
+        <caption>Clicked coordinates <div id="zoomtopoint" class="action-zoom zoombtn"></div></caption>
+        <tr><td id="qr_coords"></td></tr>
+      </table>
+
+      <table id="qr_layername_table">
+        <caption>Layer <div id="zoomtolayer" class="action-zoom zoombtn"></div></caption>
+        <tr><td id="qr_layername"></td></tr>
+      </table>
+
+      <table id="qr_attrs_table">
+        <caption>Attributes</caption>
+      </table>
+
+      <!-- camera actions and measure tool -->
+      <div id="orbitbtn" class="action-btn action-orbit">Orbit</div>
+      <div id="measurebtn" class="action-btn">Measure distance</div>
+    </div>
+
+    <!-- page info -->
+    <div id="pageinfo">
+      <h1>Current View URL</h1>
+      <div><input id="urlbox" type="text"></div>
+
+      <h1>Usage</h1>
+      <table id="usage">
+        <tr><td colspan="2" class="star">Mouse</td></tr>
+        <tr><td>Left button + Move</td><td>Orbit</td></tr>
+        <tr><td>Mouse Wheel</td><td>Zoom</td></tr>
+        <tr><td>Right button + Move</td><td>Pan</td></tr>
+
+        <tr><td colspan="2" class="star">Keys</td></tr>
+        <tr><td>Arrow keys</td><td>Move Horizontally</td></tr>
+        <tr><td>Shift + Arrow keys</td><td>Orbit</td></tr>
+        <tr><td>Ctrl + Arrow keys</td><td>Rotate</td></tr>
+        <tr><td>Shift + Ctrl + Up / Down</td><td>Zoom In / Out</td></tr>
+        <tr><td>L</td><td>Toggle Label Visibility</td></tr>
+        <tr><td>R</td><td>Start / Stop Orbit Animation</td></tr>
+        <tr><td>W</td><td>Wireframe Mode</td></tr>
+        <tr><td>Shift + R</td><td>Reset Camera Position</td></tr>
+        <tr><td>Shift + S</td><td>Save Image</td></tr>
+      </table>
+
+      <h1>About</h1>
+      <div id="about"><img src="./Qgis2threejs.png">
+        This page was made with <a href="https://www.qgis.org/">QGIS</a> and <a href="https://github.com/minorua/Qgis2threejs">Qgis2threejs</a> plugin (version 2.8).
+        <div>Powered by <a href="https://threejs.org/">three.js</a>
+        <span id="lib_proj4js"> and <a href="https://trac.osgeo.org/proj4js/">Proj4js</a></span>.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- progress bar -->
+<div id="progress"><div id="progressbar"></div></div>
+
+
+<!-- header and footer -->
+<div id="header"></div>
+<div id="footer"></div>
+
+<!-- layer panel -->
+<div id="layerpanel">
+  <div id="layerlist"></div>
+</div>
+
+<!-- animation -->
+<div id="narrativebox" class="ef1">
+  <div id="narbody">
+
+  </div>
+  <div id="nextbtn"></div>
+</div>
+
+<script>
+Q3D.Config.allVisible = true;
+Q3D.Config.viewpoint = {lookAt:{x:805970.0812894162,y:9233220.007989129,z:772.9017639160156},pos:{x:805964.2716106827,y:9232966.701288411,z:1010.5073411292617}};
+Q3D.Config.localMode = true;
+
+var container = document.getElementById("view"),
+    app = Q3D.application,
+    gui = Q3D.gui;
+
+app.init(container);       // initialize viewer
+
+// load the scene
+app.loadSceneFile("./data/index/scene.js", function (scene) {
+  // scene file has been loaded
+  app.start();
+}, function (scene) {
+  // all relevant files have been loaded
+
+});
+</script>
+</body>
+</html>

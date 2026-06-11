@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3D Campus Mapping & Underground Utility Visualization</title>
+  <meta name="description" content="A web-based platform for visualizing buildings, terrain, and underground utilities in an interactive 3D environment." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./css/style.css" />
+
+  <style>
+    :root {
+      --navy: #122359;
+      --blue: #3C6198;
+      --orange: #F68D55;
+      --peach: #FFCFA9;
+      --white: #FFFFFF;
+      --text-dark: #101828;
+      --text-muted: rgba(255, 255, 255, 0.72);
+    }
+
+    body {
+      background: var(--navy) !important;
+    }
+
+    /* Global accent override: remove remaining green from the original CSS */
+    .nav-logo-icon,
+    .btn-primary,
+    .hero-stat-number span,
+    .feature-card-number,
+    .scroll-wheel,
+    .tech-item-dot {
+      background-color: var(--orange) !important;
+    }
+
+    .hero-title .highlight,
+    .section-title .accent,
+    .hero-badge,
+    .section-label,
+    .cta-label,
+    .footer-copy span,
+    .nav-links a.active,
+    .nav-links a:hover,
+    .footer-links a:hover,
+    .nav-mobile a:hover {
+      color: var(--orange) !important;
+    }
+
+    .btn-primary,
+    .nav-cta {
+      border-color: var(--orange) !important;
+    }
+
+    .btn-primary {
+      color: var(--navy) !important;
+      box-shadow: 0 18px 45px rgba(246, 141, 85, 0.28) !important;
+    }
+
+    .btn-primary:hover {
+      background: var(--peach) !important;
+      border-color: var(--peach) !important;
+      color: var(--navy) !important;
+    }
+
+    .btn-outline {
+      border-color: rgba(255, 207, 169, 0.42) !important;
+      color: var(--peach) !important;
+    }
+
+    .btn-outline:hover {
+      background: rgba(255, 207, 169, 0.12) !important;
+      border-color: var(--orange) !important;
+      color: var(--white) !important;
+    }
+
+    /* Section color variation */
+    .navbar {
+      background: rgba(18, 35, 89, 0.92) !important;
+      border-bottom-color: rgba(255, 207, 169, 0.12) !important;
+    }
+
+    .hero {
+      background:
+        radial-gradient(circle at 15% 18%, rgba(60, 97, 152, 0.38), transparent 34%),
+        radial-gradient(circle at 82% 24%, rgba(246, 141, 85, 0.24), transparent 32%),
+        linear-gradient(135deg, var(--navy) 0%, #172C68 52%, var(--blue) 100%) !important;
+    }
+
+    .hero-bg,
+    .hero-grid,
+    .hero-topo {
+      background-color: transparent !important;
+    }
+
+    .hero-orb-1,
+    .hero-orb-2,
+    .hero-orb-3 {
+      background: radial-gradient(circle, rgba(255, 207, 169, 0.30), transparent 68%) !important;
+    }
+
+    .features {
+      background:
+        radial-gradient(circle at 12% 12%, rgba(246, 141, 85, 0.18), transparent 30%),
+        linear-gradient(180deg, #F7F9FF 0%, var(--peach) 100%) !important;
+      color: var(--text-dark) !important;
+    }
+
+    .features .section-title,
+    .features .feature-title,
+    .features .feature-desc,
+    .features .section-desc {
+      color: var(--text-dark) !important;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.78) !important;
+      border-color: rgba(60, 97, 152, 0.28) !important;
+      box-shadow: 0 24px 60px rgba(18, 35, 89, 0.12) !important;
+    }
+
+    .feature-icon-wrap {
+      background: rgba(60, 97, 152, 0.10) !important;
+      border-color: rgba(60, 97, 152, 0.32) !important;
+    }
+
+    .feature-icon-wrap svg {
+      stroke: var(--blue) !important;
+    }
+
+    .cta-section {
+      background:
+        radial-gradient(circle at 80% 20%, rgba(255, 207, 169, 0.24), transparent 30%),
+        linear-gradient(135deg, var(--blue) 0%, var(--navy) 100%) !important;
+    }
+
+    .cta-inner {
+      background: linear-gradient(135deg, rgba(18, 35, 89, 0.92), rgba(60, 97, 152, 0.72)) !important;
+      border-color: rgba(255, 207, 169, 0.26) !important;
+    }
+
+    .cta-glow {
+      background: radial-gradient(circle, rgba(246, 141, 85, 0.36), transparent 70%) !important;
+    }
+
+    .footer {
+      background: var(--navy) !important;
+      border-top-color: rgba(255, 207, 169, 0.14) !important;
+    }
+
+    .footer-divider,
+    .hero-stat,
+    .nav-logo-icon {
+      border-color: rgba(255, 207, 169, 0.24) !important;
+    }
+
+    .hero-stat {
+      background: rgba(60, 97, 152, 0.24) !important;
+    }
+
+    .hero-stat-number,
+    .hero-stat-label,
+    .hero-subtitle,
+    .cta-desc,
+    .cta-note,
+    .footer p,
+    .footer-links a,
+    .footer-tagline {
+      color: var(--text-muted) !important;
+    }
+
+    .nav-mobile {
+      background: rgba(18, 35, 89, 0.98) !important;
+    }
+
+
+    /* Final hero stats override: no green on numbers/text */
+    .hero-stat-number {
+      color: #EAF0FF !important;
+      -webkit-text-fill-color: #EAF0FF !important;
+      background: transparent !important;
+    }
+
+    .hero-stat-number span {
+      color: var(--navy) !important;
+      -webkit-text-fill-color: var(--navy) !important;
+      background: var(--orange) !important;
+      background-color: var(--orange) !important;
+      box-shadow: none !important;
+    }
+
+    .hero-stat-label {
+      color: rgba(234, 240, 255, 0.82) !important;
+      -webkit-text-fill-color: rgba(234, 240, 255, 0.82) !important;
+    }
+
+    .nav-logo-icon {
+      color: var(--navy) !important;
+      -webkit-text-fill-color: var(--navy) !important;
+      background: var(--orange) !important;
+      background-color: var(--orange) !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =============================================
+       NAVIGATION
+       ============================================= -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="./index.html" class="nav-logo">
+        <div class="nav-logo-icon">3D</div>
+        <div class="nav-logo-text">
+          Campus Mapping
+          <span>Underground Utility Viz</span>
+        </div>
+      </a>
+
+      <div class="nav-links">
+        <a href="#home" class="active">Home</a>
+        <a href="#features">Features</a>
+        <a href="./about.html">About Us</a>
+        <a href="./viewer/index.html" class="nav-cta">3D Viewer →</a>
+      </div>
+
+      <button class="nav-hamburger" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Navigation Overlay -->
+  <div class="nav-mobile">
+    <a href="#home">Home</a>
+    <a href="#features">Features</a>
+    <a href="./about.html">About Us</a>
+    <a href="./viewer/index.html" style="color: #F68D55; font-weight: 700;">3D Viewer →</a>
+  </div>
+
+
+  <!-- =============================================
+       HERO SECTION
+       ============================================= -->
+  <section class="hero" id="home">
+    <div class="hero-bg">
+      <div class="hero-grid"></div>
+      <div class="hero-topo"></div>
+      <div class="hero-orb hero-orb-1"></div>
+      <div class="hero-orb hero-orb-2"></div>
+      <div class="hero-orb hero-orb-3"></div>
+      <div class="hero-scanline"></div>
+    </div>
+
+    <!-- Decorative 3D Wireframe -->
+    <div class="hero-wireframe" aria-hidden="true">
+      <svg viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Cube front face -->
+        <rect x="80" y="120" width="120" height="120" stroke="#F68D55" stroke-width="1.5" opacity="0.7"/>
+        <!-- Cube top face -->
+        <path d="M80 120 L140 60 L260 60 L200 120 Z" stroke="#F68D55" stroke-width="1.5" opacity="0.5"/>
+        <!-- Cube right face -->
+        <path d="M200 120 L260 60 L260 180 L200 240 Z" stroke="#F68D55" stroke-width="1.5" opacity="0.4"/>
+        <!-- Inner lines front -->
+        <line x1="80" y1="160" x2="200" y2="160" stroke="#F68D55" stroke-width="0.75" opacity="0.4"/>
+        <line x1="80" y1="200" x2="200" y2="200" stroke="#F68D55" stroke-width="0.75" opacity="0.4"/>
+        <line x1="120" y1="120" x2="120" y2="240" stroke="#F68D55" stroke-width="0.75" opacity="0.4"/>
+        <line x1="160" y1="120" x2="160" y2="240" stroke="#F68D55" stroke-width="0.75" opacity="0.4"/>
+        <!-- Inner lines top -->
+        <line x1="110" y1="80" x2="230" y2="80" stroke="#F68D55" stroke-width="0.75" opacity="0.3"/>
+        <line x1="100" y1="100" x2="220" y2="100" stroke="#F68D55" stroke-width="0.75" opacity="0.3"/>
+        <!-- Inner lines right -->
+        <line x1="230" y1="80" x2="230" y2="200" stroke="#F68D55" stroke-width="0.75" opacity="0.3"/>
+        <line x1="245" y1="70" x2="245" y2="190" stroke="#F68D55" stroke-width="0.75" opacity="0.2"/>
+        <!-- Dots at vertices -->
+        <circle cx="80" cy="120" r="3" fill="#F68D55" opacity="0.8"/>
+        <circle cx="200" cy="120" r="3" fill="#F68D55" opacity="0.8"/>
+        <circle cx="200" cy="240" r="3" fill="#F68D55" opacity="0.8"/>
+        <circle cx="80" cy="240" r="3" fill="#F68D55" opacity="0.8"/>
+        <circle cx="140" cy="60" r="3" fill="#F68D55" opacity="0.6"/>
+        <circle cx="260" cy="60" r="3" fill="#F68D55" opacity="0.6"/>
+        <circle cx="260" cy="180" r="3" fill="#F68D55" opacity="0.6"/>
+        <!-- Underground dotted lines -->
+        <line x1="80" y1="240" x2="80" y2="280" stroke="#F68D55" stroke-width="1" stroke-dasharray="4,4" opacity="0.4"/>
+        <line x1="140" y1="240" x2="140" y2="280" stroke="#F68D55" stroke-width="1" stroke-dasharray="4,4" opacity="0.3"/>
+        <line x1="200" y1="240" x2="200" y2="280" stroke="#F68D55" stroke-width="1" stroke-dasharray="4,4" opacity="0.4"/>
+        <line x1="80" y1="280" x2="200" y2="280" stroke="#F68D55" stroke-width="1" stroke-dasharray="4,4" opacity="0.4"/>
+        <circle cx="140" cy="270" r="4" stroke="#F68D55" stroke-width="1" opacity="0.5"/>
+      </svg>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-badge">
+        Research Project · 3D GIS Visualization
+      </div>
+
+      <h1 class="hero-title">
+        Integrated <span class="highlight">3D Campus</span> Mapping and Underground Utility Visualization
+      </h1>
+
+      <p class="hero-subtitle">
+        A web-based platform for visualizing buildings, terrain, and underground utilities in an interactive 3D environment.
+      </p>
+
+      <div class="hero-actions">
+        <a href="./viewer/index.html" class="btn btn-primary">
+          Visit 3D Viewer
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+        <a href="#features" class="btn btn-outline">
+          Learn More
+        </a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-number">
+            <span data-count="3">0</span>D
+          </div>
+          <div class="hero-stat-label">Visualization Model</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-number">
+            LOD<span>2</span>
+          </div>
+          <div class="hero-stat-label">Building Detail Level</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-number">
+            <span data-count="4">0</span>
+          </div>
+          <div class="hero-stat-label">Data Layers</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-number">
+            Web<span>GIS</span>
+          </div>
+          <div class="hero-stat-label">Platform Type</div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- =============================================
+       FEATURES SECTION
+       ============================================= -->
+  <section class="features" id="features">
+    <div class="section-container">
+      <div class="features-header reveal">
+        <div class="section-label">Core Features</div>
+        <h2 class="section-title">What This Platform <span class="accent">Visualizes</span></h2>
+        <p class="section-desc">Three integrated data layers provide a comprehensive view of campus infrastructure — from rooftop to underground.</p>
+      </div>
+
+      <div class="features-grid">
+
+        <!-- Card 1 -->
+        <div class="feature-card reveal reveal-delay-1">
+          <div class="feature-card-number">01</div>
+          <div class="feature-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">3D Building Model</h3>
+          <p class="feature-desc">Visualisasi bangunan kampus dalam bentuk LOD2 — setiap gedung direpresentasikan dengan detail atap dan fasad berdasarkan data survei LiDAR.</p>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="feature-card reveal reveal-delay-2">
+          <div class="feature-card-number">02</div>
+          <div class="feature-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              <path d="M2 12h20"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Underground Utilities</h3>
+          <p class="feature-desc">Visualisasi jaringan pipa dan kabel bawah tanah secara 3D, lengkap dengan informasi atribut seperti jenis utilitas, dimensi, dan kedalaman pemasangan.</p>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="feature-card reveal reveal-delay-3">
+          <div class="feature-card-number">03</div>
+          <div class="feature-icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="3 11 22 2 13 21 11 13 3 11"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Digital Terrain Model</h3>
+          <p class="feature-desc">Representasi permukaan tanah (DTM) sebagai batas antara objek permukaan dan bawah permukaan, dihasilkan dari pengolahan point cloud LiDAR.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =============================================
+       CTA SECTION
+       ============================================= -->
+  <section class="cta-section" id="cta">
+    <div class="section-container">
+      <div class="cta-inner reveal">
+        <div class="cta-glow"></div>
+
+        <div class="cta-content">
+          <div class="cta-label">Interactive Platform</div>
+          <h2 class="cta-title">Explore the Interactive 3D Environment</h2>
+          <p class="cta-desc">
+            Navigasi langsung ke viewer 3D dan jelajahi model kampus secara interaktif — putar, zoom, dan klik objek untuk melihat informasi atribut detail.
+          </p>
+        </div>
+
+        <div class="cta-actions">
+          <a href="./viewer/index.html" class="btn btn-primary">
+            Open 3D Viewer
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+              <polyline points="15 3 21 3 21 9"/>
+              <line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+          </a>
+          <a href="./about.html" class="btn btn-outline" style="border-color: rgba(255, 207, 169, 0.35);">
+            Learn About the Project
+          </a>
+          <p class="cta-note">No login required · Runs in browser</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =============================================
+       FOOTER
+       ============================================= -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="./index.html" class="nav-logo" style="margin-bottom: 0.5rem;">
+            <div class="nav-logo-icon">3D</div>
+            <div class="nav-logo-text">
+              Campus Mapping
+              <span>Underground Utility Viz</span>
+            </div>
+          </a>
+          <p>Platform visualisasi 3D terintegrasi untuk pemetaan kampus dan utilitas bawah tanah berbasis teknologi LiDAR dan WebGIS.</p>
+        </div>
+
+        <div class="footer-links">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="./index.html">Home</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="./about.html">About Us</a></li>
+            <li><a href="./viewer/index.html">3D Viewer</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links">
+          <h4>Technology</h4>
+          <ul>
+            <li><a href="#">QGIS2ThreeJS</a></li>
+            <li><a href="#">Three.js / WebGL</a></li>
+            <li><a href="#">LiDAR Processing</a></li>
+            <li><a href="#">LOD2 Modeling</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <hr class="footer-divider" />
+
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2025 <span>3D Campus Mapping</span> · All rights reserved</p>
+        <p class="footer-tagline">Research Project · Geodesy & Geomatics Engineering</p>
+      </div>
+    </div>
+  </footer>
+
+
+  <script src="./js/main.js"></script>
+</body>
+</html>
