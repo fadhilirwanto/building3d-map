@@ -292,6 +292,167 @@
   top: 92px !important;
 }
 
+/* =========================
+   Query Result Popup
+   ========================= */
+
+#popup {
+  left: 14px !important;
+  top: 92px !important;
+
+  width: 390px;
+  max-width: 390px;
+
+  border-radius: 18px;
+  overflow: hidden;
+
+  background: rgba(255,255,255,0.97);
+  border: 1px solid rgba(60,97,152,.18);
+
+  box-shadow: 0 18px 42px rgba(18,35,89,.20);
+
+  backdrop-filter: blur(10px);
+}
+
+/* Header biru */
+
+#popupbar {
+  height: auto !important;
+
+  padding: 12px 16px !important;
+
+  background: linear-gradient(
+    135deg,
+    #122359,
+    #3C6198
+  ) !important;
+
+  border: none !important;
+
+  color: white;
+  font-weight: 700;
+}
+
+/* Tombol close */
+
+#closebtn {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+
+  color: white !important;
+
+  font-size: 18px;
+  line-height: 18px;
+
+  z-index: 99999;
+}
+
+#closebtn:hover {
+  background: rgba(255,255,255,.15);
+  border-radius: 50%;
+}
+
+/* Body */
+
+#popupbody {
+  padding: 12px !important;
+  background: white;
+}
+
+/* Semua tabel */
+
+#popupbody table {
+  border-collapse: collapse;
+  overflow: hidden;
+
+  border-radius: 12px;
+
+  margin-bottom: 10px;
+
+  box-shadow:
+    0 2px 8px rgba(18,35,89,.08);
+}
+
+/* Judul section */
+
+#popupbody table caption {
+  background: #f3f6fc !important;
+
+  color: #122359 !important;
+
+  font-weight: 700;
+
+  padding: 8px 10px !important;
+
+  border-bottom: 1px solid #e6ecf7;
+}
+
+/* Isi tabel */
+
+#popupbody td {
+  padding: 8px 10px !important;
+}
+
+/* Layer dan koordinat */
+
+#qr_layername_table tr,
+#qr_coords_table tr {
+  background: white !important;
+}
+
+/* Attributes zebra */
+
+#qr_attrs_table tr:nth-child(odd) {
+  background: #f8fbff !important;
+}
+
+#qr_attrs_table tr:nth-child(even) {
+  background: white !important;
+}
+
+#qr_attrs_table td:first-child {
+  font-weight: 600;
+  color: #122359;
+}
+
+/* Zoom icon */
+
+.action-zoom {
+  filter: none !important;
+  opacity: .7;
+}
+
+.action-zoom:hover {
+  background: rgba(246,141,85,.15);
+}
+
+/* Orbit dan Measure */
+
+.action-btn {
+  border: none !important;
+
+  border-radius: 10px;
+
+  background: linear-gradient(
+    135deg,
+    #F68D55,
+    #FFCFA9
+  );
+
+  color: #122359 !important;
+
+  font-weight: 700;
+
+  padding: 6px 12px !important;
+
+  margin-top: 4px;
+}
+
+.action-btn:hover {
+  transform: translateY(-1px);
+}
+  
 </style>
 <script src="./threejs/three.min.js"></script>
 <script src="./threejs/OrbitControls.js"></script>
