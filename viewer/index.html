@@ -452,6 +452,103 @@
 .action-btn:hover {
   transform: translateY(-1px);
 }
+
+/* ==========================
+   INFO PANEL (tombol i)
+   ========================== */
+
+#pageinfo {
+  display: none;
+  font-size: 14px;
+}
+
+/* Judul section */
+
+#pageinfo > h1 {
+  background: linear-gradient(
+    135deg,
+    #122359,
+    #3C6198
+  ) !important;
+
+  color: white !important;
+
+  border-radius: 12px;
+
+  padding: 10px 14px !important;
+
+  margin-top: 12px !important;
+  margin-bottom: 8px !important;
+
+  font-size: 14px !important;
+  font-weight: 700 !important;
+}
+
+/* URL box */
+
+#urlbox {
+  width: 100% !important;
+
+  border: 1px solid rgba(60,97,152,.2);
+
+  border-radius: 12px;
+
+  padding: 10px 12px;
+
+  background: #f8fbff;
+}
+
+/* Usage table */
+
+#usage {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  overflow: hidden;
+
+  border-radius: 14px;
+
+  box-shadow:
+    0 2px 8px rgba(18,35,89,.08);
+}
+
+#usage tr:nth-child(odd) {
+  background: #f8fbff !important;
+}
+
+#usage tr:nth-child(even) {
+  background: white !important;
+}
+
+#usage td {
+  padding: 10px 12px;
+}
+
+#usage td.star {
+  background: #eef3fb;
+
+  color: #122359;
+
+  font-weight: 700;
+}
+
+/* About box */
+
+#about {
+  background: #f8fbff;
+
+  border-radius: 14px;
+
+  padding: 12px;
+
+  line-height: 1.6;
+}
+
+#about img {
+  width: 32px;
+  height: 32px;
+}
   
 </style>
 <script src="./threejs/three.min.js"></script>
@@ -522,8 +619,6 @@
 
     <!-- page info -->
     <div id="pageinfo">
-      <h1>Current View URL</h1>
-      <div><input id="urlbox" type="text"></div>
 
       <h1>Usage</h1>
       <table id="usage">
@@ -543,13 +638,6 @@
         <tr><td>Shift + R</td><td>Reset Camera Position</td></tr>
         <tr><td>Shift + S</td><td>Save Image</td></tr>
       </table>
-
-      <h1>About</h1>
-      <div id="about"><img src="./Qgis2threejs.png">
-        This page was made with <a href="https://www.qgis.org/">QGIS</a> and <a href="https://github.com/minorua/Qgis2threejs">Qgis2threejs</a> plugin (version 2.8).
-        <div>Powered by <a href="https://threejs.org/">three.js</a>
-        <span id="lib_proj4js"> and <a href="https://trac.osgeo.org/proj4js/">Proj4js</a></span>.</div>
-      </div>
     </div>
   </div>
 </div>
